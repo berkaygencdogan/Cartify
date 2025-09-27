@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cartify – Sepetim</title>
+    <link rel="stylesheet" href="./cartStyles.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">🛒 Cartify <span id="cartBadge" class="badge">0</span> <a class="cart-link"
+                href="/index.html">Alışverişe Devam</a></div>
+    </header>
+
+    <main class="container" style="grid-template-columns:1fr;">
+        <section class="content">
+            <h2>Sepetim</h2>
+
+            <div id="cartEmpty" class="results-info" style="display:none">Sepetiniz boş.</div>
+
+            <div class="cart-wrap">
+                <table class="cart-table" id="cartTable">
+                    <thead>
+                        <tr>
+                            <th>Ürün</th>
+                            <th>Fiyat</th>
+                            <th>Adet</th>
+                            <th>Toplam</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartBody"></tbody>
+                </table>
+            </div>
+
+            <div class="cart-summary" id="cartSummary" style="display:none">
+                <div>Ara Toplam: <strong id="subTotal">-</strong></div>
+                <div>Kargo: <strong>0,00 TL</strong></div>
+                <div class="sum-line">Genel Toplam: <strong id="grandTotal">-</strong></div>
+                <div class="cart-actions">
+                    <button id="clearCart" class="btn ghost">Sepeti Temizle</button>
+                    <button id="checkout" class="btn">Ödemeye Geç (Mock)</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">© Cartify</footer>
+    <script src="./cart.js"></script>
+</body>
+
+</html>

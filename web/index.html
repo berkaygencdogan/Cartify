@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cartify – Web</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">🛒 Cartify <span id="cartBadge" class="badge">0</span>
+            <a class="cart-link" href="/cart.html">Sepetim</a>
+        </div>
+        <form id="searchForm" class="search">
+            <input id="q" type="search" placeholder="Ürün ara (örn: kazak, elbise)" />
+            <button type="submit">Ara</button>
+        </form>
+    </header>
+
+    <main class="container">
+        <aside class="sidebar">
+            <h3>Kategoriler</h3>
+            <ul id="categoryList" class="cat-list"></ul>
+        </aside>
+
+        <section class="content">
+            <div class="filters">
+                <div class="row">
+                    <label>Fiyat (TL):</label>
+                    <input id="minPrice" type="number" placeholder="min" min="0" />
+                    <input id="maxPrice" type="number" placeholder="max" min="0" />
+                    <label>Sırala:</label>
+                    <select id="sort">
+                        <option value="">Seç</option>
+                        <option value="price-asc">Fiyat ↑</option>
+                        <option value="price-desc">Fiyat ↓</option>
+                        <option value="name-asc">İsim A→Z</option>
+                        <option value="name-desc">İsim Z→A</option>
+                    </select>
+                    <button id="applyFilters">Uygula</button>
+                    <button id="resetFilters" class="ghost">Sıfırla</button>
+                </div>
+            </div>
+
+            <div id="resultsInfo" class="results-info"></div>
+            <div id="grid" class="grid"></div>
+
+            <div class="pagination">
+                <button id="prevPage" disabled>« Önceki</button>
+                <span id="pageInfo">Sayfa 1</span>
+                <button id="nextPage" disabled>Sonraki »</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">© Cartify</footer>
+
+    <script src="./app.js"></script>
+</body>
+
+</html>
