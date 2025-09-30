@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cartify – Sipariş Başarılı</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">🛒 Cartify <a class="cart-link" href="/orders.html">Siparişlerim</a></div>
+    </header>
+
+    <main class="container" style="grid-template-columns:1fr;">
+        <section class="content">
+            <h2>Siparişiniz Alındı 🎉</h2>
+            <p>Sipariş Numaranız: <strong id="orderId">-</strong></p>
+            <div id="orderDetail" class="cart-wrap" style="padding:12px"></div>
+            <div class="cart-actions" style="justify-content:flex-start;margin-top:12px">
+                <a class="btn" href="/orders.html">Siparişlerim</a>
+                <a class="btn ghost" href="/index.html">Alışverişe Devam</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">© Cartify</footer>
+    <script>
+        const API_BASE = "";
+        function numberToTL(n) { return n.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL"; }
+
+        $(async function () {
+            const params = new URLSearchParams(location.search);
+            const orderId = params.get("orderId");
+            $("#orderId").text(orderId || "-");
+
+            if (!orderId) { $("#orderDetail").text("Sipariş bilgisi bulunamadı."); return; }
+
+            try {
+                const r = await fetch(`${API_BASE}/api/orders/${encodeURIComponent(orderId)}`);
+                const data = await r.json();
+                const o = data?.order;
+                if (!o) { $("#orderDetail").text("Sipariş bulunamadı."); return; }
+
+                const rows = (o.items || []).map(row => `
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <img src="${row.item?.image}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid #232937">
+        <div style="flex:1">
+          <div><strong>${row.item?.name || ""}</strong></div>
+          <div>${row.item?.desc || "-"}</div>
+        </div>
+        <div>${row.qty} x ${row.item?.price || "-"}</div>
+        <div style="min-width:120px;text-align:right">${numberToTL(row.lineTotal)}</div>
+      </div>
+    `).join("");
+
+                $("#orderDetail").html(`
+      <div><strong>Tarih:</strong> ${new Date(o.createdAt).toLocaleString("tr-TR")}</div>
+      <div><strong>Durum:</strong> ${o.status}</div>
+      <hr style="border:0;border-top:1px solid #232937;margin:8px 0">
+      ${rows}
+      <hr style="border:0;border-top:1px solid #232937;margin:8px 0">
+      <div style="display:flex;justify-content:flex-end;gap:24px">
+        <div><strong>Ara Toplam:</strong> ${numberToTL(o.subTotal)}</div>
+        <div><strong>Kargo:</strong> ${numberToTL(o.shipping)}</div>
+        <div><strong>Genel Toplam:</strong> ${numberToTL(o.grandTotal)}</div>
+      </div>
+    `);
+            } catch {
+                $("#orderDetail").text("Sipariş detayları yüklenemedi.");
+            }
+        });
+    </script>
+</body>
+
+</html>

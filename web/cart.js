@@ -203,14 +203,29 @@ $(async function () {
   });
 
   $("#checkout").on("click", async function () {
-    // Mock: temizle + mesaj
+    // Basit mock müşteri – form yapacaksak buraya bağlarız
+    const customer = {
+      name: "Guest",
+      email: "guest@example.com",
+    };
+
     try {
-      await clearCart();
-      alert("Ödeme başarılı (mock). Siparişiniz alındı.");
-      window.location.href = "/index.html";
+      const r = await fetch(`${API_BASE}/api/orders/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartId: CART_ID, customer }),
+      });
+      if (!r.ok) throw new Error("order create failed");
+      const data = await r.json();
+      const orderId = data?.orderId;
+      if (!orderId) throw new Error("no order id");
+      // Başarı sayfasına yönlendir
+      window.location.href = `/order-success.html?orderId=${encodeURIComponent(
+        orderId
+      )}`;
     } catch (e) {
       console.error(e);
-      alert("Ödeme işlemi tamamlanamadı.");
+      alert("Sipariş oluşturulamadı.");
     }
   });
 });

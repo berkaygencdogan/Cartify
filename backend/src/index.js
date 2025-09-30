@@ -12,6 +12,7 @@ import {
   removeItem,
   clearCart,
 } from "./cart.js";
+import { createOrderFromCart, getOrder, listOrders } from "./orders.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,6 +51,32 @@ app.get("/api/cart", (req, res) => {
   const { cartId } = req.query;
   if (!cartId) return res.status(400).json({ error: "cartId missing" });
   res.json(getCart(cartId));
+});
+
+app.post("/api/orders/create", (req, res) => {
+  try {
+    const { cartId, customer } = req.body || {};
+    if (!cartId) return res.status(400).json({ error: "cartId required" });
+    const order = createOrderFromCart(cartId, customer || null);
+    res.json({ success: true, orderId: order.id, order });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "order create failed" });
+  }
+});
+
+// Tek sipariş
+app.get("/api/orders/:id", (req, res) => {
+  const o = getOrder(req.params.id);
+  if (!o) return res.status(404).json({ error: "order not found" });
+  res.json({ success: true, order: o });
+});
+
+// Sipariş listesi (cartId'a göre)
+app.get("/api/orders", (req, res) => {
+  const { cartId } = req.query;
+  const list = listOrders({ cartId });
+  res.json({ success: true, orders: list });
 });
 
 // Sepete ekle

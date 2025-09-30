@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cartify – Siparişlerim</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">🛒 Cartify <a class="cart-link" href="/index.html">Alışverişe Devam</a></div>
+    </header>
+
+    <main class="container" style="grid-template-columns:1fr;">
+        <section class="content">
+            <h2>Siparişlerim</h2>
+            <div id="list" class="cart-wrap" style="padding:12px"></div>
+        </section>
+    </main>
+
+    <footer class="footer">© Cartify</footer>
+    <script>
+        const API_BASE = "";
+
+        function numberToTL(n) { return n.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL"; }
+
+        $(async function () {
+            const cartId = localStorage.getItem("cartify_cartId");
+            if (!cartId) { $("#list").text("Kayıtlı sipariş bulunamadı."); return; }
+
+            try {
+                const r = await fetch(`${API_BASE}/api/orders?cartId=${encodeURIComponent(cartId)}`);
+                const data = await r.json();
+                const orders = data?.orders || [];
+
+                if (!orders.length) { $("#list").text("Henüz sipariş yok."); return; }
+
+                const html = orders.map(o => `
+      <div style="border:1px solid #232937;border-radius:12px;padding:10px;margin-bottom:10px;background:#161a22">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div><strong>#${o.id}</strong></div>
+          <div>${new Date(o.createdAt).toLocaleString("tr-TR")}</div>
+          <div>Durum: <strong>${o.status}</strong></div>
+          <div>Toplam: <strong>${numberToTL(o.grandTotal)}</strong></div>
+          <div><a class="btn ghost" href="/order-success.html?orderId=${encodeURIComponent(o.id)}">Detay</a></div>
+        </div>
+      </div>
+    `).join("");
+
+                $("#list").html(html);
+            } catch {
+                $("#list").text("Siparişler yüklenemedi.");
+            }
+        });
+    </script>
+</body>
+
+</html>
