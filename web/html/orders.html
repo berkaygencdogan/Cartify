@@ -5,13 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Cartify – Siparişlerim</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 
 <body>
     <header class="topbar">
-        <div class="brand">🛒 Cartify <a class="cart-link" href="/index.html">Alışverişe Devam</a></div>
+        <div class="brand">🛒 Cartify <a class="cart-link" href="../index.html">Alışverişe Devam</a></div>
     </header>
 
     <main class="container" style="grid-template-columns:1fr;">
@@ -45,7 +45,7 @@
           <div>${new Date(o.createdAt).toLocaleString("tr-TR")}</div>
           <div>Durum: <strong>${o.status}</strong></div>
           <div>Toplam: <strong>${numberToTL(o.grandTotal)}</strong></div>
-          <div><a class="btn ghost" href="/order-success.html?orderId=${encodeURIComponent(o.id)}">Detay</a></div>
+          <div><a class="btn ghost" href="./order-success.html?orderId=${encodeURIComponent(o.id)}">Detay</a></div>
         </div>
       </div>
     `).join("");

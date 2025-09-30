@@ -220,7 +220,7 @@ $(async function () {
       const orderId = data?.orderId;
       if (!orderId) throw new Error("no order id");
       // Başarı sayfasına yönlendir
-      window.location.href = `/order-success.html?orderId=${encodeURIComponent(
+      window.location.href = `./order-success.html?orderId=${encodeURIComponent(
         orderId
       )}`;
     } catch (e) {
